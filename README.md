@@ -23,15 +23,4 @@
     * Каждый предмет может нахоться на фотографии а не более чем одном экземпляре.
 
 ## Фотографии предметов и поверхности
-![](images\object1.jpg)
-![](images\object2.jpg)
-![](images\object3.jpg)
-![](images\object4.jpg)
-![](images\object5.jpg)
-![](images\object6.jpg)
-![](images\object7.jpg)
-![](images\object8.jpg)
-![](images\object9.jpg)
-![](images\object10.jpg)
-
-![Поверхность](images\surface.jpg)
+![Фото 1](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object1.jpg)
