@@ -23,4 +23,24 @@
     * Каждый предмет может нахоться на фотографии а не более чем одном экземпляре.
 
 ## Фотографии предметов и поверхности
-![Фото 1](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object1.jpg)
+![Предмет 1](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object1.jpg)
+
+![Предмет 2](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object2.jpg)
+
+![Предмет 3](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object3.jpg)
+
+![Предмет 4](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object4.jpg)
+
+![Предмет 5](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object5.jpg)
+
+![Предмет 6](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object6.jpg)
+
+![Предмет 7](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object7.jpg)
+
+![Предмет 8](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object8.jpg)
+
+![Предмет 9](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object9.jpg)
+
+![Предмет 10](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/object10.jpg)
+
+![Поверхность](https://github.com/kirillkuks/sem_gap_big/blob/develop/images/surface.jpg)
