@@ -13,7 +13,7 @@ from scipy.ndimage.morphology import binary_fill_holes
 
 import cv2 as cv
 
-from os import listdir
+import os
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -35,33 +35,35 @@ class ObjectInfo:
     def set_prop(self, prop) -> None:
         self.prop = prop
 
-    def match_proporion(self, obj: ObjectInfo) -> float:
+    def match(self, obj: ObjectInfo) -> float:
+        if self.kp is None or obj.kp is None:
+            return 0.0
+
         if len(obj.kp) > len(self.kp):
-            return obj.match_proporion(self)
+            return obj.match(self)
 
         bf = BFMatcher()
         matches = bf.knnMatch(self.des, obj.des, k=2)
 
         good = [[m] for m, n in matches if m.distance < self._max_multy * n.distance]
 
-        return len(good) / len(matches)
-
-        # matches = [[match[0].queryIdx, match[0].trainIdx] for match in good]
+        return len(good) / len(self.kp)
 
 
-class InterlligentPlacer:
-    _objects_folder: str = '.\..\..\\images\\objects\\'
+class IntelligentPlacer:
     _min_area: int = 100
     _surface_path: str = 'surface.jpg'
 
-    def __init__(self) -> None:
+    def __init__(self, objects_folder: str) -> None:
         self.objects: list = []
         self.cur_image = None
         self.surface = None
 
+        self._objects_folder = objects_folder
+
         self.rect_prop = None
 
-        for image_path in listdir(self._objects_folder):
+        for image_path in os.listdir(self._objects_folder):
             if image_path.find('object') != -1:
                 self.objects.append(self._load_object_info(image_path))
 
@@ -113,13 +115,32 @@ class InterlligentPlacer:
         object_info.set_key_point_info(kp, des)
         object_info.set_prop(prop)
 
-        # dots = np.vstack([np.asarray(k.pt) for k in kp])
+        plt.imshow(image)
 
-        # plt.imshow(image)
-        # plt.plot(dots[:, 0], dots[:, 1], 'or', markersize=2)
-        # plt.show()
+        x, y, u, v = self._find_object_rect(object_info)
+        self._draw_rect(x, y, u, v)
+
+        plt.show()
 
         return object_info
+
+    def _find_object_rect(self, obj: ObjectInfo):
+        x = np.min(obj.prop.coords[:, 1])
+        y = np.max(obj.prop.coords[:, 1])
+
+        u = np.min(obj.prop.coords[:, 0])
+        v = np.max(obj.prop.coords[:, 0])
+
+        print(f'{x}, {y}, {u}, {v}')
+
+        return x, y, u, v
+
+    def _draw_rect(self, x: int, y: int, u: int, v: int) -> None:
+        # (x, u) -> (y, u) -> (y, v) -> (x, v)
+        plt.plot((x, y), (u, u), 'r')
+        plt.plot((y, y), (u, v), 'r')
+        plt.plot((y, x), (v, v), 'r')
+        plt.plot((x, x), (v, u), 'r')
 
     def _extract_object(self, image):
         image_threshold = self._threshold(image)
@@ -158,9 +179,11 @@ class InterlligentPlacer:
         object_info = ObjectInfo(None)
         object_info.set_key_point_info(*self._find_key_points(image))
 
-        object_ind = np.array([obj.match_proporion(object_info) for obj in self.objects]).argmax()
+        prop = self._extract_object(image)
 
-        for i, val in enumerate(np.array([obj.match_proporion(object_info) for obj in self.objects])):
+        object_ind = np.array([obj.match(object_info) for obj in self.objects]).argmax()
+
+        for i, val in enumerate(np.array([obj.match(object_info) for obj in self.objects])):
             print(f'{self.objects[i].object_name}: {val}')
 
         print(self.objects[object_ind].object_name)
@@ -169,5 +192,7 @@ class InterlligentPlacer:
 
         plt.imshow(image)
         plt.show()
+
+        print(f'area = {self.objects[object_ind].prop.area}, {prop.area}, {prop.area / self.objects[object_ind].prop.area}')
 
         return self.objects[object_ind]
